@@ -56,12 +56,16 @@ export default class AddContact extends React.Component {
                 <View>
                     <Text>Nom du contact</Text>
                     <TextInput placeholder={'Nom'} onChangeText={(name) => this.handleChangeTitle(name)}/>
+                </View>
+                <View>
                     <Text>Mail</Text>
                     <TextInput placeholder={'Mail'} onChangeText={(mail) => this.handleChangeMail(mail)}/>
+                </View>
+                <View>
                     <Text>Numéro de téléphone</Text>
                     <TextInput placeholder={'N° de tél'} onChangeText={(tel) => this.handleChangeTel(tel)}/>
-                    <Button onPress={() => this.addContact()} title='Ajouter un contact' />
                 </View>
+                <Button onPress={() => this.addContact()} title='Ajouter un contact' />
             </>
         );
     }
