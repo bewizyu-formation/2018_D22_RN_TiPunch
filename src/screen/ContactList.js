@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
-import Contact from '../model/Contact';
-import ContactItem from '../component/ContactItem';
+import { View, FlatList, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
+import ContactItem from './ContactItem';
 
 class ContactList extends Component {
     constructor(props) {
@@ -73,12 +72,8 @@ class ContactList extends Component {
                 style={{ marginBottom: 20, marginTop: 20 }}
                 data={this.state.data}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => {
-                        Alert.alert('Youhou')
-                    }}>
-                        <ContactItem
-                            contact={item}
-                        />
+                    <TouchableOpacity onPress= {this.onPress}>
+                        <ContactItem contact={item} />
                     </TouchableOpacity>
                 )}
                 keyExtractor={item => item.email}

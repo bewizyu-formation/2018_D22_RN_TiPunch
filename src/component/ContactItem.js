@@ -20,8 +20,7 @@ export default class ContactItem extends Component {
                 <Image style={{ width: 30, height: 30 }} source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
                 />
                 <Text >
-                    {this.firstname}&nbsp;
-                    {this.lastname}&nbsp;
+                    {this.firstname} {this.lastname}
                     {this.email}
                 </Text>
             </View>
