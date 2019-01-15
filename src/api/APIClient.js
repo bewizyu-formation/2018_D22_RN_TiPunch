@@ -18,8 +18,10 @@ export const login = async (phone, password, callback) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        //token = data.token;
-        callback(data)
+        token = data.token;
+        if(callback){
+            callback(data)
+        }
     })
     .catch(e => {console.log(e);})
 }
@@ -36,7 +38,9 @@ export const getUser = async (callback) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        callback(data)
+        if(callback){
+            callback(data)
+        }
     })
     .catch(e => {console.log(e);})
 }
@@ -59,7 +63,9 @@ export const updateUser = async (contact, callback) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        callback(data)
+        if(callback){
+            callback(data)
+        }
     })
     .catch(e => {console.log(e);})
 }
@@ -76,7 +82,9 @@ export const getContacts = async (callback) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        callback(data)
+        if(callback){
+            callback(data)
+        }
     })
     .catch(e => {console.log(e);})
 }
@@ -103,7 +111,9 @@ export const addContact = async (contact, callback) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        callback(data)
+        if(callback){
+            callback(data)
+        }
     })
     .catch(e => {console.log(e);})
 }
@@ -120,7 +130,9 @@ export const deleteContact = async (contact, callback) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        callback(data)
+        if(callback){
+            callback(data)
+        }
     })
     .catch(e => {console.log(e);})
 }
@@ -147,7 +159,9 @@ export const updateContact = async (contact, callback) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        callback(data)
+        if(callback){
+            callback(data)
+        }
     })
     .catch(e => {console.log(e);})
 }
