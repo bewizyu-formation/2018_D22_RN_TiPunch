@@ -9,6 +9,8 @@ export default class DetailsContact extends React.Component {
         this.contact = navigation.getParam('contact', {})
 
         this.state = {
+            imageUrl: "https://facebook.github.io/react-native/docs/assets/favicon.png",
+            newImageUrl: "",
             isFamilyEditable:'',
             isEmergencyEditable:'', 
             buttonEditComponent: <Button onPress={() => this.editContact()} title='Modifier' />,
@@ -17,6 +19,7 @@ export default class DetailsContact extends React.Component {
             phone: this.contact.phone,
             mail: this.contact.mail,
             profile: this.contact.profile,
+
         };
         this.editContact = this.editContact.bind(this);
         this.saveEdition = this.saveEdition.bind(this);
@@ -29,15 +32,18 @@ export default class DetailsContact extends React.Component {
         this.phoneChange = this.phoneChange.bind(this);
         this.mailChange = this.mailChange.bind(this);
         this.profileChange = this.profileChange.bind(this);
+
+        this.changeImageUrl = this.changeImageUrl.bind(this);
         
     }
     componentDidMount(){
         this.setState({
-            firstNameEditable: false ,
-            lastNameEditable:false ,
-            phoneEditable:false ,
-            mailEditable:false ,
-            profileEditable:false ,
+            firstNameEditable: false,
+            lastNameEditable:false,
+            phoneEditable:false,
+            mailEditable:false,
+            profileEditable:false,
+            imageUrlEditable: false
         })
     }
 
@@ -86,6 +92,7 @@ export default class DetailsContact extends React.Component {
             phoneEditable:true,
             mailEditable:true,
             profileEditable:true,
+            imageUrlEditable: true,
             buttonEditComponent:  <Button onPress={() => this.saveEdition()} title='Save' />
         });
     }
@@ -98,15 +105,20 @@ export default class DetailsContact extends React.Component {
             phoneEditable:false ,
             mailEditable:false ,
             profileEditable:false ,
+            imageUrlEditable: false,
             buttonEditComponent:  <Button onPress={() => this.editContact()} title='Modifier' />
         });
     }
 
+    changeImageUrl(text){
+        this.setState({imageUrl: text})
+    }
     render() {
         return (
             <View>
                 {this.state.buttonEditComponent}
-                <Image style={{width:50, height: 50}} source={{uri:"https://facebook.github.io/react-native/docs/assets/favicon.png"}}/>
+                <Image style={{width:50, height: 50}} source={{uri:this.state.imageUrl}}/>
+                <TextInput value={this.state.imageUrl} onChangeText={this.changeImageUrl}  editable={this.state.imageUrlEditable}/>
                 <TextInput id='firstNameId' type="text" value={this.state.firstName} onChangeText = {(text) => this.firstNameChange(text)} editable={this.state.firstNameEditable}/>
                 <TextInput id='lastNameId' type="text" value={this.state.lastName} onChangeText = {this.lastNameChange} editable={this.state.lastNameEditable}/>
                 <Button onPress={() => this.call()} title='Appel' />
