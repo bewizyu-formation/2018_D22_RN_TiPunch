@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, LayoutAnimation, PropTypes, TextInput, Button, Alert} from 'react-native';
-import {getUser,login} from '../api/APIClient';
+import { StyleSheet, View, Text, Image, ScrollView, LayoutAnimation, PropTypes, TextInput, Button, Alert } from 'react-native';
+import { getUser, login } from '../api/APIClient';
 
 export default class UserProfile extends React.Component {
     constructor(props) {
@@ -10,7 +10,7 @@ export default class UserProfile extends React.Component {
 
         this.state = {
             buttonEditComponent: <Button onPress={() => this.editProfil()} title='Modifier' />,
-            user:{firstName:'',lastName:'',phone:'',mail:'',profile:''}
+            user: { firstName: '', lastName: '', phone: '', mail: '', profile: '' }
         };
         this.editProfil = this.editProfil.bind(this);
         this.saveProfil = this.saveProfil.bind(this);
@@ -24,14 +24,14 @@ export default class UserProfile extends React.Component {
     }
 
     componentDidMount() {
-        login("0600000002", "0000",(data)=>{
+        login("0600000002", "0000", (data) => {
             console.log(data)
             getUser((data) => {
-                console.log(data)   
-                this.setState({user:data[0]})
+                console.log(data)
+                this.setState({ user: data[0] })
             })
         })
-        
+
 
         this.setState({
             firstNameEditable: false,
@@ -53,19 +53,19 @@ export default class UserProfile extends React.Component {
     };
 
     firstNameChange(text) {
-        this.setState({ user: {firstName:text,lastName:this.state.user.lastName,phone:this.state.user.phone,mail:this.state.user.mail,profile: this.state.user.profile} })
+        this.setState({ user: { firstName: text, lastName: this.state.user.lastName, phone: this.state.user.phone, mail: this.state.user.mail, profile: this.state.user.profile } })
     }
     lastNameChange(text) {
-        this.setState({ user: {firstName:this.state.user.firstName,lastName:text,phone:this.state.user.phone,mail:this.state.user.mail,profile: this.state.user.profile} })
+        this.setState({ user: { firstName: this.state.user.firstName, lastName: text, phone: this.state.user.phone, mail: this.state.user.mail, profile: this.state.user.profile } })
     }
     phoneChange(text) {
-        this.setState({ user: {firstName:text,lastName:this.state.user.lastName,phone:text,mail:this.state.user.mail,profile: this.state.user.profile} })
+        this.setState({ user: { firstName: this.state.user.firstName, lastName: this.state.user.lastName, phone: text, mail: this.state.user.mail, profile: this.state.user.profile } })
     }
     mailChange(text) {
-        this.setState({ user: {firstName:this.state.user.firstName,lastName:this.state.user.lastName,phone:this.state.user.phone,mail:text,profile: this.state.user.profile} })
+        this.setState({ user: { firstName: this.state.user.firstName, lastName: this.state.user.lastName, phone: this.state.user.phone, mail: text, profile: this.state.user.profile } })
     }
     profileChange(text) {
-        this.setState({ user: {firstName:this.state.user.firstName,lastName:this.state.user.lastName,phone:this.state.user.phone,mail:this.state.user.mail,profile: text} })
+        this.setState({ user: { firstName: this.state.user.firstName, lastName: this.state.user.lastName, phone: this.state.user.phone, mail: this.state.user.mail, profile: text } })
     }
 
     editProfil() {
@@ -89,7 +89,7 @@ export default class UserProfile extends React.Component {
             buttonEditComponent: <Button onPress={() => this.editProfil()} title='Modifier' />
         });
     }
-    
+
     render() {
         console.log(this.state.user)
         return (
