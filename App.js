@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import AddContact from './src/screen/AddContactScreen'
+import Login from './src/screen/LoginScreen';
 
 class App extends Component{
   render() {
@@ -33,6 +34,9 @@ const styles = StyleSheet.create({
 });
 
 const AppNavigator = createStackNavigator({
+  Connexion: {
+    screen: Login
+  },
   AddContact: {
     screen: AddContact
   },
