@@ -6,13 +6,13 @@ export default class ContactItem extends Component {
     constructor(props) {
         super(props)
 
-        this.firstname = props.contact.firstname
-        this.lastname = props.contact.lastname
+        this.firstName = props.contact.firstName
+        this.lastName = props.contact.lastName
         this.phone = props.contact.phone
         this.email = props.contact.email
         this.profile = props.contact.profile
         this.gravatar = props.contact.gravatar
-        this.id = props.contact.id
+        this._id = props.contact._id
     }
     render() {
         return (
@@ -20,8 +20,7 @@ export default class ContactItem extends Component {
                 <Image style={{ width: 30, height: 30 }} source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
                 />
                 <Text >
-                    {this.firstname} {this.lastname}
-                    {this.email}
+                    {this.firstName} {this.lastName}
                 </Text>
             </View>
         )
