@@ -1,18 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import AddContact from './src/screen/AddContactScreen'
+import Login from './src/screen/LoginScreen';
 
-type Props = {};
-class App extends Component<Props> {
+class App extends Component{
   render() {
     return (
       <View style={styles.container}>
@@ -42,6 +34,9 @@ const styles = StyleSheet.create({
 });
 
 const AppNavigator = createStackNavigator({
+  Connexion: {
+    screen: Login
+  },
   AddContact: {
     screen: AddContact
   },
