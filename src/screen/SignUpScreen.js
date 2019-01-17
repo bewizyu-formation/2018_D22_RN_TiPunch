@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Button, Picker,
+  View, Text, TextInput, Button, Picker, Alert
 } from 'react-native';
+import {signUp} from '../api/APIClient'
 
 export default class SignUp extends Component {
     static navigationOptions = {
@@ -18,14 +19,36 @@ export default class SignUp extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        phone: '', password: '', lastname: '', firstname: '', profile: 'senior', mail: '',
+        phone: '', password: '', lastname: '', firstname: '', profile: 'senior', email: '',
       };
 
       this.handleChangePhone = this.handleChangePhone.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this);
       this.handleChangeFirstname = this.handleChangeFirstname.bind(this);
       this.handleChangeLastname = this.handleChangeLastname.bind(this);
-      this.handleChangeMail = this.handleChangeMail.bind(this);
+      this.handleChangeemail = this.handleChangeemail.bind(this);
+
+      this.signUpInServer = this.signUpInServer.bind(this);
+    }
+
+    signUpInServer(){
+      signUp(this.state.phone, this.state.password, this.state.firstname, this.state.lastname, this.state.email, this.state.profile.toUpperCase(), (data) =>{
+        if(data.message){
+          console.log(data.message);
+          Alert.alert(
+            'Inscription invalide',
+            data.message,
+            [
+              { text: 'OK' },
+            ],
+            { cancelable: false },
+          );
+        }
+        else {
+          data.password = this.state.password
+          this.props.navigation.navigate('Login', {user: data})
+        }
+      })
     }
 
     handleChangePhone(phone) {
@@ -44,8 +67,8 @@ export default class SignUp extends Component {
       this.setState({ lastname });
     }
 
-    handleChangeMail(mail) {
-      this.setState({ mail });
+    handleChangeemail(email) {
+      this.setState({ email });
     }
 
     render() {
@@ -78,9 +101,9 @@ export default class SignUp extends Component {
           </View>
           <View>
             <Text>Email</Text>
-            <TextInput value={this.state.mail} textContentType="emailAddress" placeholder="e-mail" onChangeText={mail => this.handleChangeMail(mail)} />
+            <TextInput value={this.state.email} textContentType="emailAddress" placeholder="e-email" onChangeText={email => this.handleChangeemail(email)} />
           </View>
-          <Button onPress={()=> {}} title="S'inscrire" />
+          <Button onPress={()=> this.signUpInServer()} title="S'inscrire" />
         </>
       );
     }
