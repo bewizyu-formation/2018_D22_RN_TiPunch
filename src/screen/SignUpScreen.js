@@ -81,7 +81,6 @@ export default class SignUp extends Component {
             <TextInput value={this.state.mail} textContentType="emailAddress" placeholder="e-mail" onChangeText={mail => this.handleChangeMail(mail)} />
           </View>
           <Button onPress={()=> {}} title="S'inscrire" />
-          <Button onPress={()=> {}} title="Se connecter" />
         </>
       );
     }

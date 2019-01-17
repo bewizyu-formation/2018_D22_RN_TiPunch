@@ -23,6 +23,7 @@ export default class Login extends Component {
       this.handleChangeTel = this.handleChangeTel.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this)
       this.connexion = this.connexion.bind(this)
+      this.signUp= this.signUp.bind(this)
     }
 
     handleChangeTel(tel) {
@@ -39,6 +40,10 @@ export default class Login extends Component {
       });
     }
 
+    signUp(){
+      this.props.navigation.navigate('SignUp')
+    }
+
     render() {
       return (
         <>
@@ -51,7 +56,7 @@ export default class Login extends Component {
             <TextInput value={this.state.password} textContentType="password" placeholder="password" onChangeText={pass => this.handleChangePassword(pass)} />
           </View>
           <Button onPress={() => this.connexion()} title="Se connecter" />
-          <Button onPress={()=> {}} title="S'inscrire" />
+          <Button onPress={()=> this.signUp()} title="S'inscrire" />
         </>
       );
     }
