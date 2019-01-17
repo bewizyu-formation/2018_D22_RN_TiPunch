@@ -22,6 +22,10 @@ export default class SignUp extends Component {
       };
 
       this.handleChangePhone = this.handleChangePhone.bind(this);
+      this.handleChangePassword = this.handleChangePassword.bind(this);
+      this.handleChangeFirstname = this.handleChangeFirstname.bind(this);
+      this.handleChangeLastname = this.handleChangeLastname.bind(this);
+      this.handleChangeMail = this.handleChangeMail.bind(this);
     }
 
     handleChangePhone(phone) {
@@ -76,8 +80,8 @@ export default class SignUp extends Component {
             <Text>Email</Text>
             <TextInput value={this.state.mail} textContentType="emailAddress" placeholder="e-mail" onChangeText={mail => this.handleChangeMail(mail)} />
           </View>
-          <Button onPress={} title="S'inscrire" />
-          <Button onPress={} title="Se connecter" />
+          <Button onPress={()=> {}} title="S'inscrire" />
+          <Button onPress={()=> {}} title="Se connecter" />
         </>
       );
     }
