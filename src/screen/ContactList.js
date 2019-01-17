@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, ActivityIndicator, TouchableOpacity,
+  View, FlatList, ActivityIndicator, TouchableOpacity, NetInfo
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import ContactItem from '../component/ContactItem';
@@ -24,9 +24,15 @@ class ContactList extends Component {
     this.state = {
       loading: true,
       data: [],
+      isConnect: false
     };
 
     this.completeData = [];
+    this.getContactSetUp = this.getContactSetUp.bind(this);
+    this.onPress = this.onPress.bind(this);
+    this.searchFilterFunction = this.searchFilterFunction.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
+    this.handleConnectionChange = this.handleConnectionChange.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +40,23 @@ class ContactList extends Component {
     if (this.state.data.length > 0) {
       this.setState({ loading: false });
     }
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
+
+    NetInfo.isConnected.fetch().done(
+        (isConnected) => {
+            this.setState({ isConnect: isConnected }); 
+        }
+    );
   }
+
+  handleConnectionChange = (isConnected) => {
+    this.setState({ isConnect: isConnected });
+    console.log(`is connected: ${this.state.isConnect}`);
+    }
+  
+    componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
+    }
 
   renderSeparator = () => (
     <View

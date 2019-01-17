@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Button,
+  View, Text, TextInput, Button
 } from 'react-native';
 import { login } from '../api/APIClient';
 
-export default class Login extends Component {
+export default class LoginScreen extends Component {
     static navigationOptions = {
       title: 'Connexion',
       headerStyle: {
@@ -18,13 +18,12 @@ export default class Login extends Component {
 
     constructor(props) {
       super(props);
-      this.state = { tel: '', password: '', loginList: [] };
+      this.state = { tel: '', password: '', loginList: [], isConnect: true};
 
       this.handleChangeTel = this.handleChangeTel.bind(this);
-      this.handleChangePassword = this.handleChangePassword.bind(this)
-      this.connexion = this.connexion.bind(this)
+      this.handleChangePassword = this.handleChangePassword.bind(this);
+      this.connexion = this.connexion.bind(this);
     }
-
     handleChangeTel(tel) {
       this.setState({ tel });
     }
@@ -51,7 +50,7 @@ export default class Login extends Component {
             <TextInput value={this.state.password} textContentType="password" placeholder="password" onChangeText={pass => this.handleChangePassword(pass)} />
           </View>
           <Button onPress={() => this.connexion()} title="Se connecter" />
-          <Button onPress={()=> {}} title="S'inscrire" />
+          <Button onPress={() => console.log('go inscrition')} title="S'inscrire" />
         </>
       );
     }
