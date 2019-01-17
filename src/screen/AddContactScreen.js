@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Button, Alert, Image
+  View, Text, TextInput, Button, Alert, Image,
 } from 'react-native';
 
 export default class AddContact extends Component {
@@ -17,7 +17,9 @@ export default class AddContact extends Component {
 
     constructor(props) {
       super(props);
-      this.state = { name: '', mail: '', tel: '', avatarSource: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg' };
+      this.state = {
+        name: '', mail: '', tel: '', avatarSource: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg',
+      };
       this.handleChangeTitle = this.handleChangeTitle.bind(this);
       this.handleChangeMail = this.handleChangeMail.bind(this);
       this.handleChangeTel = this.handleChangeTel.bind(this);
@@ -46,8 +48,9 @@ export default class AddContact extends Component {
     handleChangeTel(tel) {
       this.setState({ tel });
     }
-    handleChangeUrl(url){
-      this.setState({ avatarSource : url })
+
+    handleChangeUrl(url) {
+      this.setState({ avatarSource: url });
     }
 
     render() {
@@ -66,7 +69,10 @@ export default class AddContact extends Component {
             <TextInput placeholder="N° de tél" onChangeText={tel => this.handleChangeTel(tel)} />
           </View>
           <View>
-            <Image style={{width: 150,height: 150,borderRadius: 75}} source={{uri : this.state.avatarSource}}/>
+            <Image
+              style={{ width: 150, height: 150, borderRadius: 75 }}
+              source={{ uri: this.state.avatarSource }}
+            />
             <TextInput placeholder="Url de l'avatar" onChangeText={url => this.handleChangeUrl(url)} />
           </View>
           <Button onPress={() => this.addContact()} title="Ajouter un contact" />
