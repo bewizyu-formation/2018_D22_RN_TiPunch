@@ -5,6 +5,7 @@ import {
 import { SearchBar } from 'react-native-elements';
 import ContactItem from '../component/ContactItem';
 import { login, getContacts } from '../api/APIClient';
+import {getListContactFromDatabase, setListContactInDataBase} from '../api/AsyncStorage'
 
 class ContactList extends Component {
   static navigationOptions = {
@@ -33,6 +34,10 @@ class ContactList extends Component {
     this.getContactSetUp();
     if (this.state.data.length > 0) {
       this.setState({ loading: false });
+    } else {
+      getListContactFromDatabase((data) =>{
+        this.setState({data})
+      })
     }
   }
 
@@ -56,6 +61,7 @@ class ContactList extends Component {
       this.completeData = data;
       this.setState({ data: this.completeData });
       this.setState({ loading: false });
+      setListContactInDataBase(data);
     });
   }
 
