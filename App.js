@@ -3,6 +3,11 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import AddContact from './src/screen/AddContactScreen'
 import Login from './src/screen/LoginScreen';
+import DetailsContact from './src/screen/DetailsContactScreen';
+import SignUp from './src/screen/SignUpScreen';
+import UserProfile from './src/screen/UserProfile';
+import ContactList from './src/screen/ContactList';
+
 
 class App extends Component{
   render() {
@@ -34,11 +39,23 @@ const styles = StyleSheet.create({
 });
 
 const AppNavigator = createStackNavigator({
-  Connexion: {
+  Login: {
     screen: Login
   },
   AddContact: {
     screen: AddContact
+  },
+  ContactList: {
+    screen: ContactList
+  },
+  DetailsContact: {
+    screen: DetailsContact
+  },
+  SignUp: {
+    screen: SignUp
+  },
+  UserProfile: {
+    screen: UserProfile
   },
 });
 
