@@ -3,6 +3,9 @@ import {
   View, Image, TextInput, Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import call from 'react-native-phone-call';
+import email from 'react-native-email';
+import SendSMS from 'react-native-sms'
 
 export default class DetailsContact extends Component {
   static navigationOptions = {
@@ -19,6 +22,7 @@ export default class DetailsContact extends Component {
   constructor(props) {
     super(props);
 
+    
     const { navigation } = this.props;
     this.contact = navigation.getParam('contact', {});
 
@@ -33,11 +37,10 @@ export default class DetailsContact extends Component {
       phone: this.contact.phone,
       email: this.contact.email,
       profile: this.contact.profile,
-
     };
     this.editContact = this.editContact.bind(this);
     this.saveEdition = this.saveEdition.bind(this);
-    this.call = this.call.bind(this);
+    this.callFunction = this.callFunction.bind(this);
     this.message = this.message.bind(this);
     this.email = this.email.bind(this);
 
@@ -51,6 +54,7 @@ export default class DetailsContact extends Component {
   }
 
   componentDidMount() {
+
     this.setState({
       firstNameEditable: false,
       lastNameEditable: false,
@@ -61,17 +65,33 @@ export default class DetailsContact extends Component {
     });
   }
 
-call() {
 
-}
+  callFunction() {
+    const args = {
+      number : this.state.phone,
+      prompt: false,
+    };
 
-message() {
+    call(args).catch(console.error);
+  };
 
-}
+  message() {
+    SendSMS.send({
+      body: '',
+      recipients: [this.state.phone],
+      successTypes: ['sent', 'queued']
+    });
 
-email() {
-
-}
+  }
+  mail() {
+    const to = [this.state.mail, '']
+    email(to, {
+      cc: ['', ''],
+      bcc: '',
+      subject: '',
+      body: ''
+    }).catch(console.error)
+  }
 
   firstNameChange(text) {
     this.setState({ firstName: text });
@@ -131,6 +151,7 @@ email() {
           onChangeText={this.changeImageUrl}
           editable={this.state.imageUrlEditable}
         />
+        <View>
         <TextInput
           id="firstNameId"
           type="text"
@@ -139,12 +160,13 @@ email() {
           editable={this.state.firstNameEditable}
         />
         <TextInput id="lastNameId" type="text" value={this.state.lastName} onChangeText={this.lastNameChange} editable={this.state.lastNameEditable} />
-        <Button onPress={() => this.call()} title="Appel" />
+        <Button onPress={() => this.callFunction()} title="Appel" />
         <Button onPress={() => this.message()} title="Message" />
         <Button onPress={() => this.email()} title="email" />
         <TextInput id="phoneId" type="text" value={this.state.phone} onChangeText={this.phoneChange} editable={this.state.phoneEditable} />
         <TextInput id="emailId" type="text" value={this.state.email} onChangeText={this.emailChange} editable={this.state.emailEditable} />
         <TextInput id="profileId" type="text" value={this.state.profile} onChangeText={this.profileChange} editable={this.state.profileEditable} />
+        </View>
       </View>
     );
   }
