@@ -3,6 +3,9 @@ import {
   View, Image, TextInput, Button, NetInfo
 } from 'react-native';
 import PropTypes from 'prop-types';
+import call from 'react-native-phone-call';
+import email from 'react-native-email';
+import SendSMS from 'react-native-sms'
 
 export default class DetailsContact extends Component {
   static navigationOptions = {
@@ -19,29 +22,33 @@ export default class DetailsContact extends Component {
   constructor(props) {
     super(props);
 
+    
     const { navigation } = this.props;
     this.contact = navigation.getParam('contact', {});
 
+    console.log(this.contact);
+    
+
     this.state = {
-      imageUrl: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
+      imageUrl: this.contact.gravatar,
       buttonEditComponent: <Button onPress={() => this.editContact()} title="Modifier" />,
       firstName: this.contact.firstName,
       lastName: this.contact.lastName,
       phone: this.contact.phone,
-      mail: this.contact.mail,
+      email: this.contact.email,
       profile: this.contact.profile,
       isConnect: false
     };
     this.editContact = this.editContact.bind(this);
     this.saveEdition = this.saveEdition.bind(this);
-    this.call = this.call.bind(this);
+    this.callFunction = this.callFunction.bind(this);
     this.message = this.message.bind(this);
-    this.mail = this.mail.bind(this);
+    this.email = this.email.bind(this);
 
     this.firstNameChange = this.firstNameChange.bind(this);
     this.lastNameChange = this.lastNameChange.bind(this);
     this.phoneChange = this.phoneChange.bind(this);
-    this.mailChange = this.mailChange.bind(this);
+    this.emailChange = this.emailChange.bind(this);
     this.profileChange = this.profileChange.bind(this);
 
     this.changeImageUrl = this.changeImageUrl.bind(this);
@@ -49,11 +56,12 @@ export default class DetailsContact extends Component {
   }
 
   componentDidMount() {
+
     this.setState({
       firstNameEditable: false,
       lastNameEditable: false,
       phoneEditable: false,
-      mailEditable: false,
+      emailEditable: false,
       profileEditable: false,
       imageUrlEditable: false,
     });
@@ -75,17 +83,33 @@ export default class DetailsContact extends Component {
     NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
   }
 
-  /* call() {
 
-    }
+  callFunction() {
+    const args = {
+      number : this.state.phone,
+      prompt: false,
+    };
 
-    message() {
+    call(args).catch(console.error);
+  };
 
-    }
+  message() {
+    SendSMS.send({
+      body: '',
+      recipients: [this.state.phone],
+      successTypes: ['sent', 'queued']
+    });
 
-    mail() {
-
-    } */
+  }
+  mail() {
+    const to = [this.state.mail, '']
+    email(to, {
+      cc: ['', ''],
+      bcc: '',
+      subject: '',
+      body: ''
+    }).catch(console.error)
+  }
 
   firstNameChange(text) {
     this.setState({ firstName: text });
@@ -99,8 +123,8 @@ export default class DetailsContact extends Component {
     this.setState({ phone: text });
   }
 
-  mailChange(text) {
-    this.setState({ mail: text });
+  emailChange(text) {
+    this.setState({ email: text });
   }
 
   profileChange(text) {
@@ -112,7 +136,7 @@ export default class DetailsContact extends Component {
       firstNameEditable: true,
       lastNameEditable: true,
       phoneEditable: true,
-      mailEditable: true,
+      emailEditable: true,
       profileEditable: true,
       imageUrlEditable: true,
       buttonEditComponent: <Button onPress={() => this.saveEdition()} title="Save" />,
@@ -124,7 +148,7 @@ export default class DetailsContact extends Component {
       firstNameEditable: false,
       lastNameEditable: false,
       phoneEditable: false,
-      mailEditable: false,
+      emailEditable: false,
       profileEditable: false,
       imageUrlEditable: false,
       buttonEditComponent: <Button onPress={() => this.editContact()} title="Modifier" />,
@@ -145,6 +169,7 @@ export default class DetailsContact extends Component {
           onChangeText={this.changeImageUrl}
           editable={this.state.imageUrlEditable}
         />
+        <View>
         <TextInput
           id="firstNameId"
           type="text"
@@ -153,12 +178,13 @@ export default class DetailsContact extends Component {
           editable={this.state.firstNameEditable}
         />
         <TextInput id="lastNameId" type="text" value={this.state.lastName} onChangeText={this.lastNameChange} editable={this.state.lastNameEditable} />
-        <Button onPress={() => this.call()} title="Appel" />
+        <Button onPress={() => this.callFunction()} title="Appel" />
         <Button onPress={() => this.message()} title="Message" />
-        <Button onPress={() => this.mail()} title="Mail" />
+        <Button onPress={() => this.email()} title="email" />
         <TextInput id="phoneId" type="text" value={this.state.phone} onChangeText={this.phoneChange} editable={this.state.phoneEditable} />
-        <TextInput id="mailId" type="text" value={this.state.mail} onChangeText={this.mailChange} editable={this.state.mailEditable} />
+        <TextInput id="emailId" type="text" value={this.state.email} onChangeText={this.emailChange} editable={this.state.emailEditable} />
         <TextInput id="profileId" type="text" value={this.state.profile} onChangeText={this.profileChange} editable={this.state.profileEditable} />
+        </View>
       </View>
     );
   }
