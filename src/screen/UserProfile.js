@@ -96,6 +96,7 @@ export default class UserProfile extends React.Component {
                 <TextInput id='phoneId' type="text" value={this.state.user.phone} onChangeText={this.phoneChange} editable={this.state.phoneEditable} />
                 <TextInput id='emailId' type="text" value={this.state.user.email} onChangeText={this.emailChange} editable={this.state.emailEditable} />
                 <TextInput id='profileId' type="text" value={this.state.user.profile} onChangeText={this.profileChange} editable={this.state.profileEditable} />
+                <Button title="Déconnexion"/>
             </View>
         );
     }

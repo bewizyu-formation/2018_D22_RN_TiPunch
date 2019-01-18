@@ -9,30 +9,6 @@ import UserProfile from './src/screen/UserProfile';
 import ContactList from './src/screen/ContactList';
 
 class App extends Component{
-
-  constructor(props){
-    super(props);
-    this.state = { isConnect: false }
-
-    this.handleConnectionChange = this.handleConnectionChange.bind(this);
-  }
-
-  handleConnectionChange = (isConnected) => {
-    this.setState({ isConnect: isConnected });
-    console.log(`is connected: ${this.state.isConnect}`);
-    }
-    componentDidMount(){
-    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
-
-    NetInfo.isConnected.fetch().done(
-        (isConnected) => {
-            this.setState({ isConnect: isConnected }); 
-        }
-    );
-    }
-    componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
-    }
   render() {
     return (
       <View style={styles.container}>
