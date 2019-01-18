@@ -47,7 +47,6 @@ class ContactList extends Component {
     this.completeData = [];
 
     this.getContactSetUp = this.getContactSetUp.bind(this);
-    this.onPress = this.onPress.bind(this);
     this.searchFilterFunction = this.searchFilterFunction.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.handleConnectionChange = this.handleConnectionChange.bind(this);

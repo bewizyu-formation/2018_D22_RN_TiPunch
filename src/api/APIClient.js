@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+
 import { Alert } from 'react-native';
 
 const url = 'https://familink-api.cleverapps.io';
