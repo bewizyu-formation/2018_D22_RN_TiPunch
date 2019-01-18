@@ -43,7 +43,7 @@ export default class DetailsContact extends Component {
     this.saveEdition = this.saveEdition.bind(this);
     this.callFunction = this.callFunction.bind(this);
     this.message = this.message.bind(this);
-    this.email = this.email.bind(this);
+    this.mail = this.mail.bind(this);
 
     this.firstNameChange = this.firstNameChange.bind(this);
     this.lastNameChange = this.lastNameChange.bind(this);
