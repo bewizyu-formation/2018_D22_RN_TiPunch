@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, ActivityIndicator, TouchableOpacity, Button
+  View, FlatList, ActivityIndicator, TouchableOpacity, NetInfo, Button
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import ContactItem from '../component/ContactItem';
@@ -41,17 +41,22 @@ class ContactList extends Component {
     this.state = {
       loading: true,
       data: [],
+      isConnect: false
     };
 
     this.completeData = [];
 
+    this.getContactSetUp = this.getContactSetUp.bind(this);
+    this.onPress = this.onPress.bind(this);
+    this.searchFilterFunction = this.searchFilterFunction.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
+    this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.addButtonPress = this.addButtonPress.bind(this)
+    
     this.profilePress = this.profilePress.bind(this)
     this.onPressItem = this.onPressItem.bind(this)
-    this.getContactSetUp = this.getContactSetUp.bind(this)
-    this.searchFilterFunction = this.searchFilterFunction.bind(this)
-    this.renderHeader = this.renderHeader.bind(this)
     this.renderSeparator = this.renderSeparator.bind(this)
+
   }
 
   componentDidMount() {
@@ -64,7 +69,23 @@ class ContactList extends Component {
         this.setState({data})
       })
     }
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
+
+    NetInfo.isConnected.fetch().done(
+        (isConnected) => {
+            this.setState({ isConnect: isConnected }); 
+        }
+    );
   }
+
+  handleConnectionChange = (isConnected) => {
+    this.setState({ isConnect: isConnected });
+    console.log(`is connected: ${this.state.isConnect}`);
+    }
+  
+    componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
+    }
 
   renderSeparator = () => (
     <View

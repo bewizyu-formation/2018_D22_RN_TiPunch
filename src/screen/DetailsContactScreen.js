@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Image, TextInput, Button,
+  View, Image, TextInput, Button, NetInfo
 } from 'react-native';
 import PropTypes from 'prop-types';
 import call from 'react-native-phone-call';
@@ -37,6 +37,7 @@ export default class DetailsContact extends Component {
       phone: this.contact.phone,
       email: this.contact.email,
       profile: this.contact.profile,
+      isConnect: false
     };
     this.editContact = this.editContact.bind(this);
     this.saveEdition = this.saveEdition.bind(this);
@@ -51,6 +52,7 @@ export default class DetailsContact extends Component {
     this.profileChange = this.profileChange.bind(this);
 
     this.changeImageUrl = this.changeImageUrl.bind(this);
+    this.handleConnectionChange = this.handleConnectionChange.bind(this);
   }
 
   componentDidMount() {
@@ -63,6 +65,22 @@ export default class DetailsContact extends Component {
       profileEditable: false,
       imageUrlEditable: false,
     });
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
+
+    NetInfo.isConnected.fetch().done(
+        (isConnected) => {
+            this.setState({ isConnect: isConnected }); 
+        }
+    );
+  }
+
+  handleConnectionChange = (isConnected) => {
+    this.setState({ isConnect: isConnected });
+    console.log(`is connected: ${this.state.isConnect}`);
+  }
+  
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
   }
 
 

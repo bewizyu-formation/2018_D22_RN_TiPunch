@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Button,
+  View, Text, TextInput, Button
 } from 'react-native';
 import { login } from '../api/APIClient';
 
-export default class Login extends Component {
+export default class LoginScreen extends Component {
     static navigationOptions = {
       title: 'Connexion',
       headerStyle: {
@@ -18,8 +18,15 @@ export default class Login extends Component {
 
     constructor(props) {
       super(props);
+      this.state = { tel: '', password: '', loginList: [], isConnect: true};
 
-      
+      this.handleChangeTel = this.handleChangeTel.bind(this);
+      this.handleChangePassword = this.handleChangePassword.bind(this);
+      this.connexion = this.connexion.bind(this);
+    }
+
+    handleChangeTel(tel) {
+      this.setState({ tel });
       this.state = { phone: '', password: ''};
 
       this.handleChangePhone = this.handleChangePhone.bind(this);

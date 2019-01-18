@@ -1,15 +1,38 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, NetInfo} from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import AddContact from './src/screen/AddContactScreen'
-import Login from './src/screen/LoginScreen';
+import LoginScreen from './src/screen/LoginScreen';
 import DetailsContact from './src/screen/DetailsContactScreen';
 import SignUp from './src/screen/SignUpScreen';
 import UserProfile from './src/screen/UserProfile';
 import ContactList from './src/screen/ContactList';
 
-
 class App extends Component{
+
+  constructor(props){
+    super(props);
+    this.state = { isConnect: false }
+
+    this.handleConnectionChange = this.handleConnectionChange.bind(this);
+  }
+
+  handleConnectionChange = (isConnected) => {
+    this.setState({ isConnect: isConnected });
+    console.log(`is connected: ${this.state.isConnect}`);
+    }
+    componentDidMount(){
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
+
+    NetInfo.isConnected.fetch().done(
+        (isConnected) => {
+            this.setState({ isConnect: isConnected }); 
+        }
+    );
+    }
+    componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
+    }
   render() {
     return (
       <View style={styles.container}>
@@ -40,7 +63,7 @@ const styles = StyleSheet.create({
 
 const AppNavigator = createStackNavigator({
   Login: {
-    screen: Login
+    screen: LoginScreen
   },
   AddContact: {
     screen: AddContact
