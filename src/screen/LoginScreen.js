@@ -18,21 +18,11 @@ export default class LoginScreen extends Component {
 
     constructor(props) {
       super(props);
-      this.state = { tel: '', password: '', loginList: [], isConnect: true};
-
-      this.handleChangeTel = this.handleChangeTel.bind(this);
-      this.handleChangePassword = this.handleChangePassword.bind(this);
-      this.connexion = this.connexion.bind(this);
-    }
-
-    handleChangeTel(tel) {
-      this.setState({ tel });
-      this.state = { phone: '', password: ''};
+      this.state = { phone: '0600000002', password: '0000', loginList: [], isConnect: true};
 
       this.handleChangePhone = this.handleChangePhone.bind(this);
-      this.handleChangePassword = this.handleChangePassword.bind(this)
-      this.connexion = this.connexion.bind(this)
-      this.signUp= this.signUp.bind(this)
+      this.handleChangePassword = this.handleChangePassword.bind(this);
+      this.connexion = this.connexion.bind(this);
     }
 
     componentDidUpdate(){
