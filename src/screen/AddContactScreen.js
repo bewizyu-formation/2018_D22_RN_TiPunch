@@ -27,6 +27,7 @@ export default class AddContact extends Component {
     }
 
     addContact = () => {
+      //TODO : add with api when the addFuntion work
       Alert.alert(
         'Contact ajouté',
         `Nom : ${this.state.name} Mail : ${this.state.mail} Tel : ${this.state.tel}`,

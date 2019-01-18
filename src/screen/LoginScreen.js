@@ -18,15 +18,28 @@ export default class Login extends Component {
 
     constructor(props) {
       super(props);
-      this.state = { tel: '', password: '', loginList: [] };
 
-      this.handleChangeTel = this.handleChangeTel.bind(this);
+      
+      this.state = { phone: '', password: ''};
+
+      this.handleChangePhone = this.handleChangePhone.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this)
       this.connexion = this.connexion.bind(this)
+      this.signUp= this.signUp.bind(this)
     }
 
-    handleChangeTel(tel) {
-      this.setState({ tel });
+    componentDidUpdate(){
+      const { navigation } = this.props;
+      let user = navigation.getParam('user', null);
+      if(user){
+        if(this.state.phone !== user.phone){
+          this.setState({ phone: user.phone, password: user.password});
+        }
+      }
+    }
+
+    handleChangePhone(phone) {
+      this.setState({ phone });
     }
 
     handleChangePassword(pass) {
@@ -34,9 +47,13 @@ export default class Login extends Component {
     }
 
     connexion() {
-      login(this.state.tel, this.state.password, (data) => {
+      login(this.state.phone, this.state.password, (data) => {
         this.props.navigation.navigate('ContactList')
       });
+    }
+
+    signUp(){
+      this.props.navigation.navigate('SignUp')
     }
 
     render() {
@@ -44,14 +61,14 @@ export default class Login extends Component {
         <>
           <View>
             <Text>N° de téléphone</Text>
-            <TextInput value={this.state.tel} textContentType="telephoneNumber" placeholder="N° de tél" onChangeText={tel => this.handleChangeTel(tel)} />
+            <TextInput value={this.state.phone} textContentType="telephoneNumber" placeholder="N° de tél" onChangeText={phone => this.handleChangePhone(phone)} />
           </View>
           <View>
             <Text>Mot de passe</Text>
             <TextInput value={this.state.password} textContentType="password" placeholder="password" onChangeText={pass => this.handleChangePassword(pass)} />
           </View>
           <Button onPress={() => this.connexion()} title="Se connecter" />
-          <Button onPress={()=> {}} title="S'inscrire" />
+          <Button onPress={()=> this.signUp()} title="S'inscrire" />
         </>
       );
     }

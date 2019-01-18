@@ -26,25 +26,28 @@ export default class DetailsContact extends Component {
     const { navigation } = this.props;
     this.contact = navigation.getParam('contact', {});
 
+    console.log(this.contact);
+    
+
     this.state = {
-      imageUrl: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
+      imageUrl: this.contact.gravatar,
       buttonEditComponent: <Button onPress={() => this.editContact()} title="Modifier" />,
       firstName: this.contact.firstName,
       lastName: this.contact.lastName,
       phone: this.contact.phone,
-      mail: this.contact.mail,
+      email: this.contact.email,
       profile: this.contact.profile,
     };
     this.editContact = this.editContact.bind(this);
     this.saveEdition = this.saveEdition.bind(this);
     this.callFunction = this.callFunction.bind(this);
     this.message = this.message.bind(this);
-    this.mail = this.mail.bind(this);
+    this.email = this.email.bind(this);
 
     this.firstNameChange = this.firstNameChange.bind(this);
     this.lastNameChange = this.lastNameChange.bind(this);
     this.phoneChange = this.phoneChange.bind(this);
-    this.mailChange = this.mailChange.bind(this);
+    this.emailChange = this.emailChange.bind(this);
     this.profileChange = this.profileChange.bind(this);
 
     this.changeImageUrl = this.changeImageUrl.bind(this);
@@ -56,11 +59,12 @@ export default class DetailsContact extends Component {
       firstNameEditable: false,
       lastNameEditable: false,
       phoneEditable: false,
-      mailEditable: false,
+      emailEditable: false,
       profileEditable: false,
       imageUrlEditable: false,
     });
   }
+
 
   callFunction() {
     const args = {
@@ -101,8 +105,8 @@ export default class DetailsContact extends Component {
     this.setState({ phone: text });
   }
 
-  mailChange(text) {
-    this.setState({ mail: text });
+  emailChange(text) {
+    this.setState({ email: text });
   }
 
   profileChange(text) {
@@ -114,7 +118,7 @@ export default class DetailsContact extends Component {
       firstNameEditable: true,
       lastNameEditable: true,
       phoneEditable: true,
-      mailEditable: true,
+      emailEditable: true,
       profileEditable: true,
       imageUrlEditable: true,
       buttonEditComponent: <Button onPress={() => this.saveEdition()} title="Save" />,
@@ -126,7 +130,7 @@ export default class DetailsContact extends Component {
       firstNameEditable: false,
       lastNameEditable: false,
       phoneEditable: false,
-      mailEditable: false,
+      emailEditable: false,
       profileEditable: false,
       imageUrlEditable: false,
       buttonEditComponent: <Button onPress={() => this.editContact()} title="Modifier" />,
@@ -158,9 +162,9 @@ export default class DetailsContact extends Component {
         <TextInput id="lastNameId" type="text" value={this.state.lastName} onChangeText={this.lastNameChange} editable={this.state.lastNameEditable} />
         <Button onPress={() => this.callFunction()} title="Appel" />
         <Button onPress={() => this.message()} title="Message" />
-        <Button onPress={() => this.mail()} title="Mail" />
+        <Button onPress={() => this.email()} title="email" />
         <TextInput id="phoneId" type="text" value={this.state.phone} onChangeText={this.phoneChange} editable={this.state.phoneEditable} />
-        <TextInput id="mailId" type="text" value={this.state.mail} onChangeText={this.mailChange} editable={this.state.mailEditable} />
+        <TextInput id="emailId" type="text" value={this.state.email} onChangeText={this.emailChange} editable={this.state.emailEditable} />
         <TextInput id="profileId" type="text" value={this.state.profile} onChangeText={this.profileChange} editable={this.state.profileEditable} />
         </View>
       </View>

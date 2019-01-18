@@ -31,7 +31,7 @@ export default class ContactItem extends Component {
       <View style={styles.item}>
         <Image
           style={{ width: 30, height: 30 }}
-          source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
+          source={{ uri: this.gravatar }}
         />
         <Text>
           {this.firstName}

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, ActivityIndicator, TouchableOpacity,
+  View, FlatList, ActivityIndicator, TouchableOpacity, Button
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import ContactItem from '../component/ContactItem';
 import { login, getContacts } from '../api/APIClient';
+
+let _this = null
 
 class ContactList extends Component {
   static navigationOptions = {
@@ -16,6 +18,20 @@ class ContactList extends Component {
     headerTitleStyle: {
       fontWeight: '500',
     },
+    headerRight: (
+      <>
+        <Button 
+          onPress={() => _this.profilePress()}
+          title= "P"
+          color= "#fff">
+        </Button>
+        <Button 
+          onPress={() => _this.addButtonPress()}
+          title= "add"
+          color= "#fff">
+        </Button>
+      </>
+    ),
   };
 
   constructor(props) {
@@ -27,9 +43,18 @@ class ContactList extends Component {
     };
 
     this.completeData = [];
+
+    this.addButtonPress = this.addButtonPress.bind(this)
+    this.profilePress = this.profilePress.bind(this)
+    this.onPressItem = this.onPressItem.bind(this)
+    this.getContactSetUp = this.getContactSetUp.bind(this)
+    this.searchFilterFunction = this.searchFilterFunction.bind(this)
+    this.renderHeader = this.renderHeader.bind(this)
+    this.renderSeparator = this.renderSeparator.bind(this)
   }
 
   componentDidMount() {
+    _this = this;
     this.getContactSetUp();
     if (this.state.data.length > 0) {
       this.setState({ loading: false });
@@ -47,9 +72,16 @@ class ContactList extends Component {
     />
   );
 
-    onPress = (item) => {
-      // TODO Create Navigation to Contact Detail
-    }
+  addButtonPress(){
+    this.props.navigation.navigate('AddContact')
+  }
+  profilePress(){
+    this.props.navigation.navigate('UserProfile')
+  }
+
+  onPressItem = (item) => {
+    this.props.navigation.navigate('DetailsContact', {contact: item})
+  }
 
   getContactSetUp() {
     getContacts((data) => {
@@ -90,7 +122,7 @@ class ContactList extends Component {
         style={{ marginBottom: 10, marginTop: 20 }}
         data={this.state.data}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={this.onPress}>
+          <TouchableOpacity onPress={()  => this.onPressItem(item)}>
             <ContactItem contact={item} />
           </TouchableOpacity>
         )}
