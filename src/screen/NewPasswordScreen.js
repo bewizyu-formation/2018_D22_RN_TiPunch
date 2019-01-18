@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button, Picker, Alert } from 'react-native';
+//import {login} from '../api/APIClient';
 
 export default class NewPasswordScreen extends Component {
     static navigationOptions = {
@@ -21,12 +22,12 @@ export default class NewPasswordScreen extends Component {
         };
         this.handleChangeNewPassword = this.handleChangeNewPassword.bind(this)
         this.handleChangeConfirmNewPassword = this.handleChangeConfirmNewPassword.bind(this)
+        this.handleChangePassword = this.handleChangePassword.bind(this);
     }
 
     handleChangeNewPassword(pass) {
         this.setState({ 
             newpassword: pass,
-            isPasswordEqual:(pass===this.state.confirmnewpassword)
         });
     }
 
@@ -40,9 +41,8 @@ export default class NewPasswordScreen extends Component {
 
         });
     }
-
     handleChangePassword() {
-      //TODO Apply Change to UserProfile
+        //TODO Connect to API Forgot Password
     }
 
     render() {
