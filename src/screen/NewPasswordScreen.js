@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, Picker, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Picker, Alert, StyleSheet } from 'react-native';
 //import {login} from '../api/APIClient';
 
 export default class NewPasswordScreen extends Component {
@@ -27,6 +27,7 @@ export default class NewPasswordScreen extends Component {
 
     handleChangeNewPassword(pass) {
         this.setState({ 
+
             newpassword: pass,
         });
     }
@@ -35,6 +36,7 @@ export default class NewPasswordScreen extends Component {
     };
 
     handleChangeConfirmNewPassword(pass) {
+
         this.setState({ 
             confirmnewpassword: pass ,
             isPasswordEqual:(pass===this.state.newpassword)
@@ -48,16 +50,61 @@ export default class NewPasswordScreen extends Component {
     render() {
         return (
             <>
-                <View>
-                    <Text>Nouveau Mot de passe</Text>
-                    <TextInput value={this.state.newpassword} textContentType="password" placeholder="Nouveau Mot de passe" onChangeText={pass => this.handleChangeNewPassword(pass)} />
-                    <Text>Confirmer le Mot de passe</Text>
-                    <TextInput value={this.state.confirmnewpassword} textContentType="password" placeholder="Confirmer le Mot de passe" onChangeText={pass => this.handleChangeConfirmNewPassword(pass)} />
+
+            <View style={styles.container}>
+                <View style={styles.textContainer} >
+                    <Text style={styles.titlePhone} >Nouveau Mot de passe</Text>
+                    <TextInput style={styles.input} maxLength={4} value={this.state.newpassword} textContentType="password" placeholder="Nouveau Mot de passe" onChangeText={pass => this.handleChangeNewPassword(pass)} />
+                    <Text style={styles.titlePhone} >Confirmer le Mot de passe</Text>
+                    <TextInput style={styles.input} maxLength={4} value={this.state.confirmnewpassword} textContentType="password" placeholder="Confirmer le Mot de passe" onChangeText={pass => this.handleChangeConfirmNewPassword(pass)} />
                 </View>
-                <View>
+                <View style={styles.buttonContainer}>
+                    <Button style={styles.button} color={'#9AC221'} onPress={() => this.handleChangePassword()} title="Changer le mot de passe" disabled={!this.state.isPasswordEqual} />
                 </View>
-                <Button onPress={() => this.handleChangePassword()} title="Changer le mot de passe" disabled={!this.state.isPasswordEqual} />
+                </View>
+
             </>
         );
     }
 };
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#CBDE6D',
+    },
+    textContainer: {
+        padding: 20,
+    },
+    buttonContainer: {
+        backgroundColor: '#9AC221',
+        paddingVertical: 0
+    },
+
+    input: {
+        height: 40,
+        backgroundColor: 'white',
+        marginBottom: 10,
+        padding: 10,
+        color: 'black'
+    },
+    button: {
+        tintColor: '#9AC221',
+        backgroundColor: '#9AC221',
+        color: '#9AC221',
+        textAlign: 'center',
+        fontWeight: '700'
+    },
+    titlePhone: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    }
+    /*buttonText:{
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: '700'
+    }*/
+});
+

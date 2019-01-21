@@ -7,6 +7,7 @@ import DetailsContact from './src/screen/DetailsContactScreen';
 import SignUp from './src/screen/SignUpScreen';
 import UserProfile from './src/screen/UserProfile';
 import ContactList from './src/screen/ContactList';
+import NewPasswordScreen from './src/screen/NewPasswordScreen';
 
 class App extends Component{
   render() {
@@ -55,6 +56,9 @@ const AppNavigator = createStackNavigator({
   },
   UserProfile: {
     screen: UserProfile
+  },
+  NewPasswordScreen: {
+    screen: NewPasswordScreen
   },
 });
 
