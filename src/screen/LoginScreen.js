@@ -20,11 +20,12 @@ export default class LoginScreen extends Component {
 
     constructor(props) {
       super(props);
-
       this.state = { phone: '', password: '', loginList: [], isConnect: true, checked : false, deco: false};
+
       this.handleChangePhone = this.handleChangePhone.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this);
       this.connexion = this.connexion.bind(this);
+      this.signUp= this.signUp.bind(this)
     }
 
     componentDidMount() {
@@ -44,20 +45,6 @@ export default class LoginScreen extends Component {
         }
       });
     }
-    handleChangePhonel(phone) {
-      this.setState({ phone });
-      this.state = { phone: '', password: ''};
-
-      this.handleChangePhone = this.handleChangePhone.bind(this);
-      this.handleChangePassword = this.handleChangePassword.bind(this)
-      this.connexion = this.connexion.bind(this)
-      this.signUp= this.signUp.bind(this)
-    }
-
-    componentDidUpdate(){
-      
-    }
-
     handleChangePhone(phone) {
       this.setState({ phone });
     }
