@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Button, NetInfo
+  View, Text, TextInput, Button, NetInfo 
 } from 'react-native';
 import { login } from '../api/APIClient';
+import {CheckBox} from 'react-native-elements';
+import {setUser, getUser} from '../api/AsyncStorage';
 
 export default class LoginScreen extends Component {
     static navigationOptions = {
@@ -18,8 +20,8 @@ export default class LoginScreen extends Component {
 
     constructor(props) {
       super(props);
-      this.state = { tel: '', password: '', loginList: [], isConnect: true};
-      this.handleChangeTel = this.handleChangeTel.bind(this);
+      this.state = { phone: '', password: '', loginList: [], isConnect: true, checked : false, dataUser: []};
+      this.handleChangePhone = this.handleChangePhone.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this);
       this.connexion = this.connexion.bind(this);
     }
@@ -32,9 +34,19 @@ export default class LoginScreen extends Component {
               this.setState({ isConnect: isConnected }); 
           }
       );
+      getUser((phone) => {
+        this.setState({ phone });
+        if(this.state.phone.length > 0){
+          this.setState({ checked : true });
+          console.log('Checked' + this.state.checked);
+        } else {
+          this.setState({checked : false})
+          console.log('Checked' + this.state.checked);
+        }
+      });
     }
-    handleChangeTel(tel) {
-      this.setState({ tel });
+    handleChangePhonel(phone) {
+      this.setState({ phone });
       this.state = { phone: '', password: ''};
 
       this.handleChangePhone = this.handleChangePhone.bind(this);
@@ -62,6 +74,11 @@ export default class LoginScreen extends Component {
     }
 
     connexion() {
+      if(this.state.checked){
+         setUser(this.state.phone);
+      } else {
+         setUser('');
+      }
       if(this.state.isConnect){
         login(this.state.phone, this.state.password, (data) => {
           this.props.navigation.navigate('ContactList')
@@ -78,7 +95,7 @@ export default class LoginScreen extends Component {
     handleConnectionChange = (isConnected) => {
       this.setState({ isConnect: isConnected });
       console.log(`is connected: ${this.state.isConnect}`);
-      }
+    }
 
       checkConnection(){
         if(this.state.isConnect){
@@ -92,6 +109,7 @@ export default class LoginScreen extends Component {
                   <Text>Mot de passe</Text>
                   <TextInput value={this.state.password} textContentType="password" placeholder="password" onChangeText={pass => this.handleChangePassword(pass)} />
               </View>
+              <CheckBox title='Se souvenir de moi' checked={this.state.checked} onPress={() => this.setState({checked: !this.state.checked})}/>
               <Button onPress={() => this.connexion()} title="Se connecter" />
               <Button onPress={()=> this.signUp()} title="S'inscrire" />
             </View>

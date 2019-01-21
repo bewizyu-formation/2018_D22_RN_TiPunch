@@ -5,7 +5,7 @@ import {
 import { SearchBar } from 'react-native-elements';
 import ContactItem from '../component/ContactItem';
 import { getContacts } from '../api/APIClient';
-import {getListContactFromDatabase, setListContactInDataBase} from '../api/AsyncStorage'
+import {getListContactFromDatabase, setListContactInDataBase} from '../api/AsyncStorage';
 
 let _this = null
 

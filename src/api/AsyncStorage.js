@@ -22,18 +22,18 @@ export const getListContactFromDatabase = async (callback) => {
      }
   }
 
-export const setUser = async (data) => {
+export const setUser = async (id) => {
     try {
-        await AsyncStorage.setItem('saveUser', JSON.stringify(data));
+        await AsyncStorage.setItem('saveUser', id);
     } catch (error) {
         console.log(error)
     }
 }
-export const getListContactFromDatabase = async (callback) => {
+export const getUser = async (callback) => {
     try {
         const value = await AsyncStorage.getItem('saveUser');
         if (value !== null) {
-            callback(JSON.parse(value));
+            callback(value);
         }
         else {
             callback([])
