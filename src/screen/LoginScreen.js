@@ -23,31 +23,11 @@ export default class LoginScreen extends Component {
     },
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      tel: '',
-      password: '',
-      loginList: [],
-      isConnect: true,
-      isUserSetInfo: false,
-      borderColor: 'red'
-    };
-    this.handleChangeTel = this.handleChangeTel.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.connexion = this.connexion.bind(this);
-  }
 
-
-  handleChangePassword(pass) {
-    this.setState({
-      password: pass,
-      isUserSetInfo: (pass.length == 4 && this.state.phone.length == 10)
-    });
-  }
+  
     constructor(props) {
       super(props);
-      this.state = { phone: '', password: '', loginList: [], isConnect: true, checked : false, deco: false};
+      this.state = { phone: '', password: '', loginList: [], isConnect: true, checked : false, deco: false,isUserSetInfo: false,borderColor: 'red'};
 
       this.handleChangePhone = this.handleChangePhone.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -74,6 +54,13 @@ export default class LoginScreen extends Component {
     }
     handleChangePhone(phone) {
       this.setState({ phone });
+    }
+
+    handleChangePassword(pass) {
+      this.setState({
+        password: pass,
+        isUserSetInfo: (pass.length == 4 && this.state.phone.length == 10)
+      });
     }
 
     connexion() {
