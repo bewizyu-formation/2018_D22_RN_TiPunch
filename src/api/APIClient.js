@@ -259,11 +259,11 @@ export const updateContact = async (contact, callback) => {
       isEmergencyUser: contact.isEmergencyUser,
     }),
   })
-    .then(response => response.json())
-    .then((data) => {
+  .then((data) => {
+      console.log('after then')
       if (callback) {
         callback(data);
-      }
+      } 
     })
     .catch((e) => {
       Alert.alert(
