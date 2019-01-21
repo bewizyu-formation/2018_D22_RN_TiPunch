@@ -64,6 +64,7 @@ export default class DetailsContact extends Component {
     this.changeImageUrl = this.changeImageUrl.bind(this);
     this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.renderPicker = this.renderPicker.bind(this);
+
   }
 
   componentDidMount() {
@@ -90,13 +91,8 @@ export default class DetailsContact extends Component {
   handleConnectionChange = (isConnected) => {
     this.setState({ isConnect: isConnected });
     console.log(`is connected: ${this.state.isConnect}`);
-  }
-  
-  componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
-  }
 
-
+  }
   callFunction() {
     const args = {
       number : this.state.phone,

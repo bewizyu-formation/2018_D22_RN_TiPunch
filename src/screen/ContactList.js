@@ -4,8 +4,9 @@ import {
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import ContactItem from '../component/ContactItem';
-import { login, getContacts } from '../api/APIClient';
-import {getListContactFromDatabase, setListContactInDataBase} from '../api/AsyncStorage'
+
+import { getContacts } from '../api/APIClient';
+import {getListContactFromDatabase, setListContactInDataBase} from '../api/AsyncStorage';
 import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -33,10 +34,13 @@ class ContactList extends Component {
   constructor(props) {
     super(props);
 
+    const { navigation } = this.props;
+    this.connect = navigation.getParam('connect', {});
+
     this.state = {
       loading: true,
       data: [],
-      isConnect: false
+      isConnect : this.connect,
     };
 
     this.completeData = [];
@@ -44,7 +48,6 @@ class ContactList extends Component {
     this.getContactSetUp = this.getContactSetUp.bind(this);
     this.searchFilterFunction = this.searchFilterFunction.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
-    this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.addButtonPress = this.addButtonPress.bind(this)
     
     this.profilePress = this.profilePress.bind(this)
@@ -57,28 +60,8 @@ class ContactList extends Component {
     this.getContactSetUp();
     if (this.state.data.length > 0) {
       this.setState({ loading: false });
-    } else {
-      getListContactFromDatabase((data) =>{
-        this.setState({data})
-      })
     }
-    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
-
-    NetInfo.isConnected.fetch().done(
-        (isConnected) => {
-            this.setState({ isConnect: isConnected }); 
-        }
-    );
   }
-
-  handleConnectionChange = (isConnected) => {
-    this.setState({ isConnect: isConnected });
-    console.log(`is connected: ${this.state.isConnect}`);
-    }
-  
-    componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
-    }
 
   renderSeparator = () => (
     <View
@@ -103,13 +86,21 @@ class ContactList extends Component {
   }
 
   getContactSetUp() {
-    console.log('get Contact list')
-    getContacts((data) => {
-      this.completeData = data;
-      this.setState({ data: this.completeData });
-      this.setState({ loading: false });
-      setListContactInDataBase(data);
-    });
+    if(this.state.isConnect){
+      getContacts((data) => {
+        this.completeData = data;
+        this.setState({ data: this.completeData });
+        this.setState({ loading: false });
+        setListContactInDataBase(data);
+      });
+    } else {
+      getListContactFromDatabase((data) => {
+        this.completeData = data;
+        this.setState({ data: this.completeData });
+        this.setState({ loading: false });
+        setListContactInDataBase(data);
+      });
+    }
   }
 
   searchFilterFunction(text) {
@@ -131,7 +122,6 @@ class ContactList extends Component {
       autoCorrect={false}
     />
   );
-
   render() {
     if (this.state.loading) {
       return (
