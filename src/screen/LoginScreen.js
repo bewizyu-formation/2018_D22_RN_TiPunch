@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
 
-  View, Text, TextInput, Button, StyleSheet, Image, KeyboardAvoidingView, ScrollView,
+  View, Text, TextInput, Button, StyleSheet, Image, KeyboardAvoidingView, ScrollView, NetInfo
 
 
 } from 'react-native';
