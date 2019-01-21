@@ -2,23 +2,16 @@ import { AsyncStorage } from "react-native"
 
 export const setListContactInDataBase = async (data) => {
     try {
-        console.log('set data in database')
         await AsyncStorage.setItem('listcontact', JSON.stringify(data));
-        await getListContactFromDatabase(() => {
-            console.log('Async: ' + data);
-        })
     } catch (error) {
-      // Error saving data
+        console.log(error)
     }
-    console.log()
 } 
 
 export const getListContactFromDatabase = async (callback) => {
     try {
-        console.log('get data in database')
         const value = await AsyncStorage.getItem('listcontact');
         if (value !== null) {
-            console.log('return data from database')
             callback(JSON.parse(value));
         }
         else {
@@ -28,3 +21,38 @@ export const getListContactFromDatabase = async (callback) => {
        console.log(error)
      }
   }
+
+export const setUser = async (id) => {
+    try {
+        await AsyncStorage.setItem('saveUser', id);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getUser = async (callback) => {
+    try {
+        const value = await AsyncStorage.getItem('saveUser');
+        if (value !== null) {
+            callback(value);
+        }
+        else {
+            callback([])
+        } 
+     } catch (error) {
+       console.log(error)
+     }
+}
+
+export const removeItem = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    }
+    catch(exception) {
+      return false;
+    }
+}
+
+
+
