@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Button, StyleSheet, Image
+  View, Text, TextInput, Button, StyleSheet, Image, KeyboardAvoidingView, ScrollView,
 } from 'react-native';
 import { login } from '../api/APIClient';
+
 
 export default class LoginScreen extends Component {
 
@@ -19,12 +20,13 @@ export default class LoginScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
-        tel: '', 
-        password: '', 
-        loginList: [], 
-        isConnect: true,
-        isUserSetInfo: false
+    this.state = {
+      tel: '',
+      password: '',
+      loginList: [],
+      isConnect: true,
+      isUserSetInfo: false,
+      borderColor: 'red'
     };
     this.handleChangeTel = this.handleChangeTel.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -41,26 +43,17 @@ export default class LoginScreen extends Component {
     this.signUp = this.signUp.bind(this)
   }
 
-  componentDidUpdate() {
-    const { navigation } = this.props;
-    let user = navigation.getParam('user', null);
-    if (user) {
-      if (this.state.phone !== user.phone) {
-        this.setState({ phone: user.phone, password: user.password });
-      }
-    }
-  }
 
   handleChangePhone(phone) {
-    this.setState({ 
+    this.setState({
       phone,
-     });
+    });
   }
 
   handleChangePassword(pass) {
-    this.setState({ 
+    this.setState({
       password: pass,
-      isUserSetInfo:(pass===this.state.phone)
+      isUserSetInfo: (pass.length == 4 && this.state.phone.length == 10)
     });
   }
 
@@ -88,22 +81,31 @@ export default class LoginScreen extends Component {
     this.props.navigation.navigate('SignUp')
   }
 
+  forgotPassword() {
+    //TODO Lien avec API ForgotPassword
+  }
+
   render() {
     return (
       <>
-        <View style={styles.container}>
-          <View style={styles.loginContainer}>
-            <Image resizeMode="contain" style={styles.logo} source={require('../assets/logo.png')} />
-          </View>
-          <View style={styles.textContainer}>
+        <KeyboardAvoidingView style={styles.container} enabled>
+          <Image source={{uri:'../assets/logo.png'}} style={{ position: 'absolute', zIndex: -1,  width: 800,height: 600 }} />
+          <ScrollView style={styles.textContainer}>
             <Text style={styles.titlePhone}>Numéro de téléphone :</Text>
-            <TextInput style={styles.input} value={this.state.phone} textContentType="telephoneNumber" placeholder="N° de tél" onChangeText={phone => this.handleChangePhone(phone)}/>
+            <TextInput style={styles.input} maxLength={10} value={this.state.phone} textContentType="telephoneNumber" placeholder="N° de tél" onChangeText={phone => this.handleChangePhone(phone)} />
             <Text style={styles.titlePhone}>Mot de passe :</Text>
-            <TextInput style={styles.input} value={this.state.password} textContentType="password" placeholder="Mot de Passe" onChangeText={pass => this.handleChangePassword(pass)}/>
-            <Button style={styles.button} color={'#628B35'}onPress={() => this.connexion()} title="Connection" disabled={!this.state.isUserSetInfo} />
-            <Button style={styles.button} color={'#9AC221'} onPress={() => this.signUp()} title="Vous n'avez pas de compte ?"/>
-          </View>
-        </View>
+            <TextInput style={styles.input} maxLength={4} value={this.state.password} textContentType="password" placeholder="Mot de Passe" onChangeText={pass => this.handleChangePassword(pass)} />
+            <View style={styles.buttonContainer}>
+              <Button style={styles.button} color={'#628B35'} onPress={() => this.connexion()} title="Connection" disabled={!this.state.isUserSetInfo} />
+            </View>
+          <View style={styles.buttonContainer}>
+              <Button style={styles.button} color={'#9AC221'} onPress={() => this.signUp()} title="Vous n'avez pas de compte ?" />
+            </View>
+            <View style={styles.buttonContainer}>
+            <Button style={styles.button} color={'#9AC221'} onPress={() => this.forgotPassword()} title="Mot de passe oublié ?" />
+            </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
       </>
     );
   }
@@ -122,122 +124,40 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center'
   },
+  buttonContainer: {
+    backgroundColor: '#9AC221',
+    paddingVertical: 0,
+    marginBottom: 10,
+  },
   logo: {
     position: 'absolute',
     width: 200,
     height: 800
   },
-  input:{
+  input: {
     height: 40,
     backgroundColor: 'white',
     marginBottom: 10,
     padding: 10,
     color: 'black'
   },
-  button:{
+  button: {
     tintColor: '#9AC221',
     backgroundColor: '#9AC221',
-    paddingVertical: 15,
     color: '#9AC221',
     textAlign: 'center',
-    fontWeight: '700'
+    fontWeight: '700',
+    marginBottom: 5,
   },
   titlePhone: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   }
-/*buttonText:{
-    color: '#fff',
-    textAlign: 'center',
-    fontWeight: '700'
-}*/
+  /*buttonText:{
+      color: '#fff',
+      textAlign: 'center',
+      fontWeight: '700'
+  }*/
 });
-
-
-
-
-/*<View style={styles.containerlogo}>
-<Image resizeMode="contain" style={styles.logo} source={require('../assets/logo.png')} />
-</View>
-<View style={styles.containerCase}>
-<Text style={styles.titlePhone}>Numéro de téléphone :</Text>
-<View style={styles.subtitleCase}>
-  <TextInput value={this.state.phone} textContentType="telephoneNumber" placeholder="N° de tél" onChangeText={phone => this.handleChangePhone(phone)} />
-</View>
-<Text style={styles.titlePhone}>Mot de passe :</Text>
-<View style={styles.subtitleCase}>
-  <TextInput value={this.state.password} textContentType="password" placeholder="Mot de Passe" onChangeText={pass => this.handleChangePassword(pass)} />
-</View>
-</View>
-<View style={styles.containerCase}>
-<Button onPress={() => this.connexion()} title="Se connecter" style={{ color: 'red' }} />
-</View>
-<View style={styles.containerCase}>
-<Button onPress={() => this.signUp()} title="S'inscrire" style={{ color: 'red' }} />
-</View>
-
-const styles = StyleSheet.create({
-
-  containerCase: {
-    padding: 30
-  },
-  containerlogo: {
-    alignItems: 'center',
-    flexGrow: 1,
-    justifyContent: 'center'
-  },
-  logo: {
-    position: 'absolute',
-    width: 300,
-    height: 100
-  },
-  phoneNumberCase: {
-    height: 60,
-    backgroundColor: '#CBDE6D',
-    marginBottom: 10,
-    padding: 0,
-    color: '#CBDE6D'
-  },
-  passwordCase: {
-    height: 60,
-    backgroundColor: '#CBDE6D',
-    marginBottom: 10,
-    padding: 0,
-    color: '#CBDE6D'
-  },
-  titlePhone: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  titlePhoneCase: {
-    height: 60,
-    backgroundColor: '#CBDE6D',
-    marginBottom: 10,
-    padding: 10,
-    color: '#CBDE6D',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  subtitleCase: {
-    height: 60,
-    backgroundColor: '#CBDE6D',
-    marginBottom: 20,
-    padding: 10,
-    color: '#CBDE6D',
-    fontSize: 16,
-    fontWeight: 'bold',
-
-  },
-  button: {
-    backgroundColor: 'blue',
-    minHeight: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 30,
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  }
-});*/
 
