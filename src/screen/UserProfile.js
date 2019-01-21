@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, LayoutAnimation, PropTypes, TextInput, Button, Alert } from 'react-native';
 import { getUser, login } from '../api/APIClient';
-
+import {setUser, removeItem} from '../api/AsyncStorage';
 
 export default class UserProfile extends React.Component {
     constructor(props) {
@@ -11,7 +11,7 @@ export default class UserProfile extends React.Component {
 
         this.state = {
             buttonEditComponent: <Button onPress={() => this.editProfil()} title='Modifier' />,
-            user: { firstName: '', lastName: '', phone: '', eemail: '', profile: '' }
+            user: { firstName: '', lastName: '', phone: '', email: '', profile: '' }
         };
         this.editProfil = this.editProfil.bind(this);
         this.saveProfil = this.saveProfil.bind(this);
@@ -23,6 +23,13 @@ export default class UserProfile extends React.Component {
         this.profileChange = this.profileChange.bind(this);
 
     }
+
+    deconnexion() {
+        setUser('');
+        removeItem('saveUser');
+        removeItem('listcontact');
+        this.props.navigation.navigate('Login', {deco: true});
+      }
 
     componentDidMount() {
         getUser((data) => {
@@ -100,10 +107,10 @@ export default class UserProfile extends React.Component {
       }
 
     render() {
-        console.log(this.state.user)
         return (
             <View style={styles.container}>
                 {this.state.buttonEditComponent}
+
                 <View style={styles.textContainer}>
                 <TextInput style={styles.input} id='firstNameId' type="text" value={this.state.user.firstName} onChangeText={(text) => this.firstNameChange(text)} editable={this.state.firstNameEditable} />
                 <TextInput style={styles.input} id='lastNameId' type="text" value={this.state.user.lastName} onChangeText={this.lastNameChange} editable={this.state.lastNameEditable} />
@@ -112,6 +119,8 @@ export default class UserProfile extends React.Component {
                 <TextInput style={styles.input} id='profileId' type="text" value={this.state.user.profile} onChangeText={this.profileChange} editable={this.state.profileEditable} />
                 </View>
                 <Button color={'#9AC221'} onPress={() => this.newPassword()} title="Changer de Mot de Passe ?"/>
+                   <Button onPress={() => this.deconnexion()} title="Déconnexion"/>
+
             </View>
         );
     }

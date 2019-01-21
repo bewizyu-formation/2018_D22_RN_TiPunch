@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import {
+
   View, Text, TextInput, Button, StyleSheet, Image, KeyboardAvoidingView, ScrollView,
+
+
 } from 'react-native';
 import { login } from '../api/APIClient';
+import {CheckBox} from 'react-native-elements';
+import {setUser, getUser} from '../api/AsyncStorage';
 
 
 export default class LoginScreen extends Component {
@@ -33,22 +38,6 @@ export default class LoginScreen extends Component {
     this.connexion = this.connexion.bind(this);
   }
 
-  handleChangeTel(tel) {
-    this.setState({ tel });
-    this.state = { phone: '', password: '' };
-
-    this.handleChangePhone = this.handleChangePhone.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this)
-    this.connexion = this.connexion.bind(this)
-    this.signUp = this.signUp.bind(this)
-  }
-
-
-  handleChangePhone(phone) {
-    this.setState({
-      phone,
-    });
-  }
 
   handleChangePassword(pass) {
     this.setState({
@@ -56,11 +45,48 @@ export default class LoginScreen extends Component {
       isUserSetInfo: (pass.length == 4 && this.state.phone.length == 10)
     });
   }
+    constructor(props) {
+      super(props);
+      this.state = { phone: '', password: '', loginList: [], isConnect: true, checked : false, deco: false};
 
-  connexion() {
-    login(this.state.phone, this.state.password, (data) => {
+      this.handleChangePhone = this.handleChangePhone.bind(this);
+      this.handleChangePassword = this.handleChangePassword.bind(this);
+      this.connexion = this.connexion.bind(this);
+      this.signUp= this.signUp.bind(this)
+    }
 
-      if (data.message) {
+    componentDidMount() {
+      NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
+  
+      NetInfo.isConnected.fetch().done(
+          (isConnected) => {
+              this.setState({ isConnect: isConnected }); 
+          }
+      );
+      getUser((phone) => {
+        this.setState({ phone });
+        if(this.state.phone.length > 0){
+          this.setState({ checked : true });
+        } else {
+          this.setState({checked : false})
+        }
+      });
+    }
+    handleChangePhone(phone) {
+      this.setState({ phone });
+    }
+
+    connexion() {
+    
+      if(this.state.checked){
+         setUser(this.state.phone);
+      } else {
+         setUser('');
+      }
+      if(this.state.isConnect){
+        login(this.state.phone, this.state.password, (data) => {
+          this.setState({phone:'', password:'',checked:false});
+         if (data.message) {
         console.log(data.message);
         Alert.alert(
           'Erreur',
@@ -74,20 +100,26 @@ export default class LoginScreen extends Component {
       else {
         this.props.navigation.navigate('ContactList')
       }
-    });
-  }
+        });
+      } else {
+          this.props.navigation.navigate('ContactList', {connect: this.state.isConnect});
+      }
+    }
 
-  signUp() {
-    this.props.navigation.navigate('SignUp')
-  }
-
-  forgotPassword() {
+    signUp(){
+      this.props.navigation.navigate('SignUp')
+    }
+forgotPassword() {
     //TODO Lien avec API ForgotPassword
   }
+    handleConnectionChange = (isConnected) => {
+      this.setState({ isConnect: isConnected });
+    }
 
-  render() {
-    return (
-      <>
+      checkConnection(){
+        if(this.state.isConnect){
+          return (
+            <>
         <KeyboardAvoidingView style={styles.container} enabled>
           <Image source={{uri:'../assets/logo.png'}} style={{ position: 'absolute', zIndex: -1,  width: 800,height: 600 }} />
           <ScrollView style={styles.textContainer}>
@@ -95,6 +127,7 @@ export default class LoginScreen extends Component {
             <TextInput style={styles.input} maxLength={10} value={this.state.phone} textContentType="telephoneNumber" placeholder="N° de tél" onChangeText={phone => this.handleChangePhone(phone)} />
             <Text style={styles.titlePhone}>Mot de passe :</Text>
             <TextInput style={styles.input} maxLength={4} value={this.state.password} textContentType="password" placeholder="Mot de Passe" onChangeText={pass => this.handleChangePassword(pass)} />
+            <CheckBox title='Se souvenir de moi' checked={this.state.checked} onPress={() => this.setState({checked: !this.state.checked})}/>
             <View style={styles.buttonContainer}>
               <Button style={styles.button} color={'#628B35'} onPress={() => this.connexion()} title="Connection" disabled={!this.state.isUserSetInfo} />
             </View>
@@ -107,8 +140,28 @@ export default class LoginScreen extends Component {
             </ScrollView>
         </KeyboardAvoidingView>
       </>
-    );
-  }
+          )
+        } else {
+            return(
+              <View>
+                <Text>Vous n'êtes pas connecté à internet</Text>
+                <Button onPress={() => this.connexion()} title="Passer en mode hors ligne" />
+              </View>
+            )
+        }
+      }
+
+    componentWillUnmount() {
+      NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
+    }
+
+    render() {
+      return (
+        <>
+          {this.checkConnection()}
+        </>
+      );
+    }
 }
 
 const styles = StyleSheet.create({

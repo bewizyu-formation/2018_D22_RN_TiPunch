@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import {
-  View, FlatList, ActivityIndicator, TouchableOpacity, NetInfo, Button
+  View, FlatList, ActivityIndicator, TouchableOpacity, NetInfo, Button, StyleSheet
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import ContactItem from '../component/ContactItem';
-import { login, getContacts } from '../api/APIClient';
-import {getListContactFromDatabase, setListContactInDataBase} from '../api/AsyncStorage'
+
+import { getContacts } from '../api/APIClient';
+import {getListContactFromDatabase, setListContactInDataBase} from '../api/AsyncStorage';
+import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+
 
 let _this = null
 
@@ -21,16 +25,8 @@ class ContactList extends Component {
     },
     headerRight: (
       <>
-        <Button 
-          onPress={() => _this.profilePress()}
-          title= "P"
-          color= "#fff">
-        </Button>
-        <Button 
-          onPress={() => _this.addButtonPress()}
-          title= "add"
-          color= "#fff">
-        </Button>
+        <IconEvilIcons name="user" style={{marginRight: 5}} size={35} color="#fff" onPress={() => _this.profilePress()}/>
+        <IconAntDesign name="plus" style={{marginLeft: 10, marginRight: 10}} size={30} color="#fff" onPress={() => _this.addButtonPress()}/>
       </>
     ),
   };
@@ -38,10 +34,13 @@ class ContactList extends Component {
   constructor(props) {
     super(props);
 
+    const { navigation } = this.props;
+    this.connect = navigation.getParam('connect', {});
+
     this.state = {
       loading: true,
       data: [],
-      isConnect: false
+      isConnect : this.connect,
     };
 
     this.completeData = [];
@@ -49,7 +48,6 @@ class ContactList extends Component {
     this.getContactSetUp = this.getContactSetUp.bind(this);
     this.searchFilterFunction = this.searchFilterFunction.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
-    this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.addButtonPress = this.addButtonPress.bind(this)
     
     this.profilePress = this.profilePress.bind(this)
@@ -57,34 +55,13 @@ class ContactList extends Component {
     this.renderSeparator = this.renderSeparator.bind(this)
 
   }
-
   componentDidMount() {
     _this = this;
     this.getContactSetUp();
     if (this.state.data.length > 0) {
       this.setState({ loading: false });
-    } else {
-      getListContactFromDatabase((data) =>{
-        this.setState({data})
-      })
     }
-    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
-
-    NetInfo.isConnected.fetch().done(
-        (isConnected) => {
-            this.setState({ isConnect: isConnected }); 
-        }
-    );
   }
-
-  handleConnectionChange = (isConnected) => {
-    this.setState({ isConnect: isConnected });
-    console.log(`is connected: ${this.state.isConnect}`);
-    }
-  
-    componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
-    }
 
   renderSeparator = () => (
     <View
@@ -105,16 +82,25 @@ class ContactList extends Component {
   }
 
   onPressItem = (item) => {
-    this.props.navigation.navigate('DetailsContact', {contact: item})
+    this.props.navigation.navigate('DetailsContact', {contact: item, reload: this.getContactSetUp})
   }
 
   getContactSetUp() {
-    getContacts((data) => {
-      this.completeData = data;
-      this.setState({ data: this.completeData });
-      this.setState({ loading: false });
-      setListContactInDataBase(data);
-    });
+    if(this.state.isConnect){
+      getContacts((data) => {
+        this.completeData = data;
+        this.setState({ data: this.completeData });
+        this.setState({ loading: false });
+        setListContactInDataBase(data);
+      });
+    } else {
+      getListContactFromDatabase((data) => {
+        this.completeData = data;
+        this.setState({ data: this.completeData });
+        this.setState({ loading: false });
+        setListContactInDataBase(data);
+      });
+    }
   }
 
   searchFilterFunction(text) {
@@ -127,14 +113,15 @@ class ContactList extends Component {
 
   renderHeader = () => (
     <SearchBar
+      inputStyle={styles.searchBarInput}
+      containerStyle={styles.searchBarContainer}
       placeholder="Votre recherche ici..."
-      lightTheme
       round
+      lightTheme
       onChangeText={text => this.searchFilterFunction(text)}
       autoCorrect={false}
     />
   );
-
   render() {
     if (this.state.loading) {
       return (
@@ -144,19 +131,47 @@ class ContactList extends Component {
       );
     }
     return (
-      <FlatList
-        style={{ marginBottom: 10, marginTop: 20 }}
-        data={this.state.data}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={()  => this.onPressItem(item)}>
-            <ContactItem contact={item} />
-          </TouchableOpacity>
-        )}
-        keyExtractor={item => item._id}
-        ItemSeparatorComponent={this.renderSeparator}
-        ListHeaderComponent={this.renderHeader}
-      />
+      <View style={styles.container}>
+        <FlatList
+          style={styles.flatlist}
+          data={this.state.data}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={()  => this.onPressItem(item)}>
+              <ContactItem contact={item} />
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item._id}
+          ItemSeparatorComponent={this.renderSeparator}
+          ListHeaderComponent={this.renderHeader}
+          stickyHeaderIndices={[0]}
+        />
+      </View>
     );
   }
 }
 export default ContactList;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    width: '100%',
+  },
+  flatlist: {
+    width: '100%'
+  },
+  searchBarInput: {
+    backgroundColor: "#E2E3E7"
+  },
+  searchBarContainer: {
+    backgroundColor: "#628B35",
+  }
+});
+
+/*
+Primaire Vert :  #628B35 (RVB : 98 139 53)
+Secondaire Vert : #9AC221 (RVB : 154 194 33)
+Tertiaire Vert : #CBDE6D (RVB : 203 22 109)
+Habillage Beige : #E5E1B8 (RVB : 229 225 184)
+Fond Gris clair : #E2E3E7 (RVB : 226 227 231)
+*/

@@ -26,7 +26,8 @@ export default class NewPasswordScreen extends Component {
     }
 
     handleChangeNewPassword(pass) {
-        this.setState({
+        this.setState({ 
+
             newpassword: pass,
         });
     }
@@ -35,9 +36,10 @@ export default class NewPasswordScreen extends Component {
     };
 
     handleChangeConfirmNewPassword(pass) {
-        this.setState({
-            confirmnewpassword: pass,
-            isPasswordEqual: (pass === this.state.newpassword)
+
+        this.setState({ 
+            confirmnewpassword: pass ,
+            isPasswordEqual:(pass===this.state.newpassword)
 
         });
     }
@@ -48,6 +50,7 @@ export default class NewPasswordScreen extends Component {
     render() {
         return (
             <>
+
             <View style={styles.container}>
                 <View style={styles.textContainer} >
                     <Text style={styles.titlePhone} >Nouveau Mot de passe</Text>
@@ -59,10 +62,12 @@ export default class NewPasswordScreen extends Component {
                     <Button style={styles.button} color={'#9AC221'} onPress={() => this.handleChangePassword()} title="Changer le mot de passe" disabled={!this.state.isPasswordEqual} />
                 </View>
                 </View>
+
             </>
         );
     }
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -102,3 +107,4 @@ const styles = StyleSheet.create({
         fontWeight: '700'
     }*/
 });
+
