@@ -52,7 +52,6 @@ class ContactList extends Component {
     this.renderSeparator = this.renderSeparator.bind(this)
 
   }
-
   componentDidMount() {
     _this = this;
     this.getContactSetUp();
@@ -100,10 +99,11 @@ class ContactList extends Component {
   }
 
   onPressItem = (item) => {
-    this.props.navigation.navigate('DetailsContact', {contact: item})
+    this.props.navigation.navigate('DetailsContact', {contact: item, reload: this.getContactSetUp})
   }
 
   getContactSetUp() {
+    console.log('get Contact list')
     getContacts((data) => {
       this.completeData = data;
       this.setState({ data: this.completeData });
