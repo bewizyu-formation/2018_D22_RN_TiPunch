@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, LayoutAnimation, PropTypes, TextInput, Button, Alert } from 'react-native';
 import { getUser, login } from '../api/APIClient';
-
+import {setUser, removeItem} from '../api/AsyncStorage';
 export default class UserProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -10,7 +10,7 @@ export default class UserProfile extends React.Component {
 
         this.state = {
             buttonEditComponent: <Button onPress={() => this.editProfil()} title='Modifier' />,
-            user: { firstName: '', lastName: '', phone: '', eemail: '', profile: '' }
+            user: { firstName: '', lastName: '', phone: '', email: '', profile: '' }
         };
         this.editProfil = this.editProfil.bind(this);
         this.saveProfil = this.saveProfil.bind(this);
@@ -22,6 +22,13 @@ export default class UserProfile extends React.Component {
         this.profileChange = this.profileChange.bind(this);
 
     }
+
+    deconnexion() {
+        setUser('');
+        removeItem('saveUser');
+        removeItem('listcontact');
+        this.props.navigation.navigate('Login', {deco: true});
+      }
 
     componentDidMount() {
         getUser((data) => {
@@ -87,7 +94,6 @@ export default class UserProfile extends React.Component {
     }
 
     render() {
-        console.log(this.state.user)
         return (
             <View>
                 {this.state.buttonEditComponent}
@@ -96,7 +102,7 @@ export default class UserProfile extends React.Component {
                 <TextInput id='phoneId' type="text" value={this.state.user.phone} onChangeText={this.phoneChange} editable={this.state.phoneEditable} />
                 <TextInput id='emailId' type="text" value={this.state.user.email} onChangeText={this.emailChange} editable={this.state.emailEditable} />
                 <TextInput id='profileId' type="text" value={this.state.user.profile} onChangeText={this.profileChange} editable={this.state.profileEditable} />
-                <Button title="Déconnexion"/>
+                <Button onPress={() => this.deconnexion()} title="Déconnexion"/>
             </View>
         );
     }

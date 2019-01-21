@@ -20,7 +20,8 @@ export default class LoginScreen extends Component {
 
     constructor(props) {
       super(props);
-      this.state = { phone: '', password: '', loginList: [], isConnect: true, checked : false, dataUser: []};
+
+      this.state = { phone: '', password: '', loginList: [], isConnect: true, checked : false, deco: false};
       this.handleChangePhone = this.handleChangePhone.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this);
       this.connexion = this.connexion.bind(this);
@@ -38,10 +39,8 @@ export default class LoginScreen extends Component {
         this.setState({ phone });
         if(this.state.phone.length > 0){
           this.setState({ checked : true });
-          console.log('Checked' + this.state.checked);
         } else {
           this.setState({checked : false})
-          console.log('Checked' + this.state.checked);
         }
       });
     }
@@ -56,13 +55,7 @@ export default class LoginScreen extends Component {
     }
 
     componentDidUpdate(){
-      const { navigation } = this.props;
-      let user = navigation.getParam('user', null);
-      if(user){
-        if(this.state.phone !== user.phone){
-          this.setState({ phone: user.phone, password: user.password});
-        }
-      }
+      
     }
 
     handleChangePhone(phone) {
@@ -81,10 +74,11 @@ export default class LoginScreen extends Component {
       }
       if(this.state.isConnect){
         login(this.state.phone, this.state.password, (data) => {
+          this.setState({phone:'', password:'',checked:false});
           this.props.navigation.navigate('ContactList')
         });
       } else {
-          this.props.navigation.navigate('ContactList', {connect: this.state.isConnect})
+          this.props.navigation.navigate('ContactList', {connect: this.state.isConnect});
       }
     }
 
@@ -94,7 +88,6 @@ export default class LoginScreen extends Component {
 
     handleConnectionChange = (isConnected) => {
       this.setState({ isConnect: isConnected });
-      console.log(`is connected: ${this.state.isConnect}`);
     }
 
       checkConnection(){

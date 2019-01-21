@@ -29,6 +29,7 @@ export const setUser = async (id) => {
         console.log(error)
     }
 }
+
 export const getUser = async (callback) => {
     try {
         const value = await AsyncStorage.getItem('saveUser');
@@ -41,4 +42,17 @@ export const getUser = async (callback) => {
      } catch (error) {
        console.log(error)
      }
-  }
+}
+
+export const removeItem = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    }
+    catch(exception) {
+      return false;
+    }
+}
+
+
+
